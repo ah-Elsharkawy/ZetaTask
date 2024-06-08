@@ -1,4 +1,10 @@
 const express = require("express");
+const {
+  idValidation,
+  addImageValidation,
+  updateImageValidation,
+} = require("../Middlewares/validations/imageValidation");
+const validate = require("../Middlewares/validations/validator");
 const router = express.Router();
 
 const {
@@ -9,8 +15,13 @@ const {
   deleteImage,
 } = require("../Controllers/imageController");
 
-router.route("/").get(getImages).post(addImage);
+router.route("/").get(getImages).post(addImageValidation, validate, addImage);
 
-router.route("/:id").get(getImageById).patch(updateImage).delete(deleteImage);
+router
+  .route("/:id")
+  .all(idValidation, validate)
+  .get(getImageById)
+  .patch(updateImageValidation, validate, updateImage)
+  .delete(deleteImage);
 
 module.exports = router;
