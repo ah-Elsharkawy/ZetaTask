@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Favourites from "./components/Favourites/Favourites";
 import Header from "./components/Home/Header";
+import PuffLoader from "react-spinners/PuffLoader";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function App() {
   // fetching photos from an API
@@ -35,7 +37,7 @@ function App() {
   }, [photos]);
 
   if (photos.length === 0) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
 
   return (

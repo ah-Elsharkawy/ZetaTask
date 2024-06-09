@@ -1,5 +1,5 @@
 // src/context/UserContext.js
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import {
   doc,
@@ -13,10 +13,29 @@ import { toast } from "react-toastify";
 const UserContext = createContext();
 
 export const useUser = () => useContext(UserContext);
+const savedUser = localStorage.getItem("currentUser");
 
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [favorites, setFavorites] = useState([]);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem("currentUser");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [favorites, setFavorites] = useState(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem("currentUser");
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
   const updateUser = async (user) => {
     setCurrentUser(user);
@@ -27,8 +46,10 @@ export const UserProvider = ({ children }) => {
       } else {
         setFavorites([]);
       }
+      localStorage.setItem("currentUser", JSON.stringify(user));
     } else {
       setFavorites([]);
+      localStorage.removeItem("currentUser");
     }
   };
 
