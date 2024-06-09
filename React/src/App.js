@@ -8,6 +8,7 @@ import ImageGrid from "./components/Image/ImagesGrid";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const onAddToFavorites = () => {
@@ -40,20 +41,17 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <h1>React App</h1>
-      <ToastContainer />
-
-      {/* <ImageCard
-        imageUrl={photos[0].src.original}
-        title={photos[0].alt}
-        onAddToFavorites={onAddToFavorites}
-      /> */}
-      {/* <ImageGrid photos={photos} /> */}
-      {/* <SignUp />
-       */}
-      <SignIn />
-    </div>
+    <Router>
+      <div className="App">
+        <h1>React App</h1>
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/register" element={<SignUp />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -16,7 +16,12 @@ const CenteredCardActions = styled(CardActions)({
   justifyContent: "center",
 });
 
-const ImageCard = ({ imageUrl, title, onAddToFavorites }) => {
+const ImageCard = ({
+  imageUrl,
+  title,
+  onAddToFavorites,
+  inFavourites = false,
+}) => {
   return (
     <StyledCard>
       <StyledCardMedia image={imageUrl} title={title} />
@@ -24,6 +29,11 @@ const ImageCard = ({ imageUrl, title, onAddToFavorites }) => {
         <Button size="small" color="primary" onClick={onAddToFavorites}>
           <FavoriteIcon /> Add to Favorites
         </Button>
+        {inFavourites && (
+          <Button size="small" color="secondary">
+            Remove from Favorites
+          </Button>
+        )}
       </CenteredCardActions>
     </StyledCard>
   );

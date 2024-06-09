@@ -9,6 +9,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
+import { useUser } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const FormContainer = styled(Box)({
   display: "flex",
@@ -33,7 +35,8 @@ const StyledButton = styled(Button)({
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { setCurrentUser, currentUser, favorites } = useUser();
+  const navigate = useNavigate();
   const handleLogIn = async () => {
     try {
       if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -49,11 +52,15 @@ const LogIn = () => {
 
       await signInWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
+      setCurrentUser(user);
+
       toast.success("Logged In successfully", {
         position: "top-center",
         autoClose: 1000,
       });
-      console.log(user);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(favorites);
+      navigate("/register");
     } catch (error) {
       toast.error(error.message, { position: "top-center", autoClose: 1000 });
     }
