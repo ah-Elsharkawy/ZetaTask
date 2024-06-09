@@ -6,6 +6,8 @@ import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 import ImageGrid from "./components/Image/ImagesGrid";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const onAddToFavorites = () => {
@@ -40,6 +42,7 @@ function App() {
   return (
     <div className="App">
       <h1>React App</h1>
+      <ToastContainer />
 
       {/* <ImageCard
         imageUrl={photos[0].src.original}
@@ -47,7 +50,9 @@ function App() {
         onAddToFavorites={onAddToFavorites}
       /> */}
       {/* <ImageGrid photos={photos} /> */}
-      <SignUp />
+      {/* <SignUp />
+       */}
+      <SignIn />
     </div>
   );
 }
