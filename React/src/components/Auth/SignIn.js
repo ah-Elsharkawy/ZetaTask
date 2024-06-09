@@ -4,11 +4,7 @@ import { auth, db } from "../../firebase";
 import { Button, TextField, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { toast } from "react-toastify";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +31,7 @@ const StyledButton = styled(Button)({
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setCurrentUser, currentUser, favorites } = useUser();
+  const { setCurrentUser } = useUser();
   const navigate = useNavigate();
   const handleLogIn = async () => {
     try {
@@ -59,8 +55,7 @@ const LogIn = () => {
         autoClose: 1000,
       });
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(favorites);
-      navigate("/register");
+      navigate("/");
     } catch (error) {
       toast.error(error.message, { position: "top-center", autoClose: 1000 });
     }

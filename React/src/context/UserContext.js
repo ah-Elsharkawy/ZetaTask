@@ -8,6 +8,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const UserContext = createContext();
 
@@ -34,10 +35,20 @@ export const UserProvider = ({ children }) => {
   const addToFavorites = async (photoUrl) => {
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser.uid);
+
+      // check if the photo is already in favorites
+      if (favorites.includes(photoUrl)) {
+        return;
+      }
       await updateDoc(userDocRef, {
         favorites: arrayUnion(photoUrl),
       });
       setFavorites((prevFavorites) => [...prevFavorites, photoUrl]);
+    } else {
+      toast.error("Please log in first", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     }
   };
 
@@ -50,6 +61,11 @@ export const UserProvider = ({ children }) => {
       setFavorites((prevFavorites) =>
         prevFavorites.filter((url) => url !== photoUrl)
       );
+    } else {
+      toast.error("Please log in first", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     }
   };
 

@@ -2,6 +2,7 @@ import React from "react";
 import { styled } from "@mui/system";
 import { Card, CardActions, CardMedia, Button } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useUser } from "../../context/UserContext";
 
 const StyledCard = styled(Card)({
   maxWidth: 300,
@@ -16,22 +17,33 @@ const CenteredCardActions = styled(CardActions)({
   justifyContent: "center",
 });
 
-const ImageCard = ({
-  imageUrl,
-  title,
-  onAddToFavorites,
-  inFavourites = false,
-}) => {
+const ImageCard = ({ imageUrl, inFavourites = false }) => {
+  const { addToFavorites, removeFromFavorites } = useUser();
   return (
     <StyledCard>
-      <StyledCardMedia image={imageUrl} title={title} />
+      <StyledCardMedia image={imageUrl} />
       <CenteredCardActions>
-        <Button size="small" color="primary" onClick={onAddToFavorites}>
-          <FavoriteIcon /> Add to Favorites
-        </Button>
+        {!inFavourites && (
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              addToFavorites(imageUrl);
+            }}
+          >
+            <FavoriteIcon /> add to favorites
+          </Button>
+        )}
         {inFavourites && (
-          <Button size="small" color="secondary">
-            Remove from Favorites
+          <Button
+            size="small"
+            color="secondary"
+            style={{ color: "red" }}
+            onClick={() => {
+              removeFromFavorites(imageUrl);
+            }}
+          >
+            <FavoriteIcon /> remove from favorites
           </Button>
         )}
       </CenteredCardActions>

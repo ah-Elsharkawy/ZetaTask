@@ -9,12 +9,10 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Favourites from "./components/Favourites/Favourites";
+import Header from "./components/Home/Header";
 
 function App() {
-  const onAddToFavorites = () => {
-    alert("Added to favorites!");
-  };
-
   // fetching photos from an API
 
   const [photos, setPhotos] = useState([]);
@@ -43,12 +41,18 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h1>React App</h1>
+        <Header />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<SignIn />} />
+          <Route
+            path="/"
+            element={
+              <ImageGrid photos={photos.map((photo) => photo.src.original)} />
+            }
+          />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
+          <Route path="/favourites" element={<Favourites />} />
         </Routes>
       </div>
     </Router>

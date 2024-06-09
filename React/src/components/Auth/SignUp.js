@@ -6,6 +6,7 @@ import { styled } from "@mui/system";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const FormContainer = styled(Box)({
   display: "flex",
@@ -31,7 +32,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const navigate = useNavigate();
   const handleSignUp = async () => {
     try {
       if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -51,10 +52,16 @@ const SignUp = () => {
 
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
+      await setDoc(doc(db, "users", user.uid), {
+        favorites: [],
+      });
+
       toast.success("User created successfully", {
         position: "top-center",
         autoClose: 1000,
       });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      navigate("/login");
       console.log(user);
     } catch (error) {
       toast.error(error.message, { position: "top-center", autoClose: 1000 });
